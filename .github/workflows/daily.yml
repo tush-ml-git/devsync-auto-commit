@@ -2,8 +2,11 @@ name: DevSync Daily Commit
 
 on:
   schedule:
-    - cron: '15 9 * * *'   # runs daily at 09:15 UTC
+    - cron: '15 9 * * *'
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   commit-job:
@@ -13,14 +16,14 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Configure Git
+      - name: Setup Git
         run: |
-          git config user.name "github-actions"
-          git config user.email "23f2002971@ds.study.iitm.ac.in"
+          git config --global user.name "github-actions"
+          git config --global user.email "23f2002971@ds.study.iitm.ac.in"
 
       - name: 23f2002971@ds.study.iitm.ac.in automated commit step
         run: |
           echo "Update run at $(date)" >> devsync-log.txt
           git add devsync-log.txt
-          git commit -m "DevSync automated daily commit"
+          git commit -m "DevSync automated daily commit $(date)" || echo "No changes"
           git push
